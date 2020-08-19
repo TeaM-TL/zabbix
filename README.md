@@ -1,4 +1,4 @@
 # My Zabbix plugins
-Collection my Zabbix plugins
+Collection of my Zabbix plugins
 
 - OpenDJ - LDAP server
