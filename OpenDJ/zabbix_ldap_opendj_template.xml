@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-08-19T10:29:42Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template App LDAP OpenDJ</template>
+            <name>Template App LDAP OpenDJ</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>LDAP</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>OpenDJ is Running (1=OK)</name>
+                    <key>ldap389.stat[local,alive]</key>
+                    <delay>60s</delay>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>([0-9]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <expression>{sum(3)}=0</expression>
+                            <name>OpenDJ is DOWN in {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OpenDJ Replication approximate-delay (0=OK)</name>
+                    <key>ldap389.stat[local,approximatedelay]</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>([0-9]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;0</expression>
+                            <name>OpenDJ Replication approximate delay</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OpenDJ Current Connections</name>
+                    <key>ldap389.stat[local,currentconnections]</key>
+                    <delay>60s</delay>
+                    <history>30d</history>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>([0-9]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>OpenDJ Entries No</name>
+                    <key>ldap389.stat[local,entriesno]</key>
+                    <delay>60s</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>([0-9]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;10</expression>
+                            <name>OpenDJ Entries No is too less</name>
+                            <priority>DISASTER</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OpenDJ Replication missing-changes (0=OK)</name>
+                    <key>ldap389.stat[local,missingchanges]</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>([0-9]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;0</expression>
+                            <name>OpenDJ Replication missing changes</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OpenDJ Port LDAP is Listening (1=OK)</name>
+                    <key>net.tcp.listen[389]</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{sum(#3)}=0</expression>
+                            <name>OpenDJ Port LDAP is DOWN in {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>OpenDJ Port LDAPS is Listening (1=OK)</name>
+                    <key>net.tcp.listen[636]</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <applications>
+                        <application>
+                            <name>LDAP</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{sum(#3)}=0</expression>
+                            <name>OpenDJ Port LDAPS is DOWN in {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>LDAP-389 Discovery</name>
+                    <key>ldap389.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>1d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Replica &quot;{#REPLICA}&quot; Last Update</name>
+                            <key>ldap389.stat[{#REPLICA},lastupdatestart]</key>
+                            <delay>300s</delay>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <applications>
+                                <application>
+                                    <name>LDAP</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Replica &quot;{#REPLICA}&quot; Status</name>
+                            <key>ldap389.stat[{#REPLICA},lastupdatestatus]</key>
+                            <delay>300s</delay>
+                            <applications>
+                                <application>
+                                    <name>LDAP</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{sum(#3)}=0 or {nodata(15m)}=1</expression>
+                                    <name>Replica &quot;{#REPLICA}&quot; Not Available</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Replica &quot;{#REPLICA}&quot; Since Last Update (sec)</name>
+                            <key>ldap389.stat[{#REPLICA},timesincelastupdate]</key>
+                            <delay>300s</delay>
+                            <applications>
+                                <application>
+                                    <name>LDAP</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template App LDAP OpenDJ:ldap389.stat[{#REPLICA},timesincelastupdate].last()}&gt;18000 and {Template App LDAP OpenDJ:ldap389.stat[{#REPLICA},lastupdatestart].str(&quot;1970-01-01&quot;)}=0</expression>
+                            <name>Replica &quot;{#REPLICA}&quot; Not Executed More Five Hours</name>
+                            <priority>WARNING</priority>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Replica &quot;{#REPLICA}&quot; Updates Intervals</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>0000DD</color>
+                                    <item>
+                                        <host>Template App LDAP OpenDJ</host>
+                                        <key>ldap389.stat[{#REPLICA},timesincelastupdate]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$LDAPEXEC}</macro>
+                    <value>ns-slapd</value>
+                </macro>
+                <macro>
+                    <macro>{$LDAPPORTSSL}</macro>
+                    <value>636</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>389-DS &quot;local&quot; Operations</name>
+            <graph_items>
+                <graph_item>
+                    <color>0000CC</color>
+                    <item>
+                        <host>Template App LDAP OpenDJ</host>
+                        <key>ldap389.stat[local,missingchanges]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00AA00</color>
+                    <item>
+                        <host>Template App LDAP OpenDJ</host>
+                        <key>ldap389.stat[local,entriesno]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
