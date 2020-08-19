@@ -3,6 +3,9 @@
 ## Origin
 ported from: http://www.umgum.com/zabbix-ldap-389
 
+## OpenDJ
+- 4.4.6 community edition
+
 ## What is monitored
 - number of current connections
 - number of entries in database
